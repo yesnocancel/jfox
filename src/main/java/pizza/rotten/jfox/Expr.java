@@ -1,8 +1,7 @@
 package pizza.rotten.jfox;
-  
-import java.util.List;
 
 abstract class Expr {
+
     static class Binary extends Expr {
         final Expr left;
         final Token operator;

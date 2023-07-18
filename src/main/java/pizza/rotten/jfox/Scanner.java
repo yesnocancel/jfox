@@ -108,7 +108,7 @@ class Scanner {
                     identifier();
                 }
                 else {
-                    Fox.error(line, "Unexpected character: " + c);
+                    JFox.error(line, "Unexpected character: " + c);
                 }
                 break;
         }
@@ -121,7 +121,7 @@ class Scanner {
         }
 
         if (isAtEndOfSource()) {
-            Fox.error(line, "Unterminated string.");
+            JFox.error(line, "Unterminated string.");
             return;
         }
 
