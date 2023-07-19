@@ -99,8 +99,6 @@ class Scanner {
 
             case '"': string(); break;
 
-
-
             default:
                 if (isDigit(c)) {
                     number();
@@ -116,7 +114,10 @@ class Scanner {
 
     private void string() {
         while (peek() != '"' && !isAtEndOfSource()) {
-            if (peek() == '\n') line++;
+            if (peek() == '\n') {
+                // we support line breaks inside strings, but we have to increase the line counter
+                line++;
+            }
             advance();
         }
 
@@ -161,7 +162,10 @@ class Scanner {
         int nestedCount = 0;
 
         while (!isAtEndOfSource() && (peek() != '*' || peekpeek() != '/' || nestedCount > 0)) {
-            if (peek() == '\n') line++;
+            if (peek() == '\n') {
+                // on a line break, we have to increase the line counter
+                line++;
+            }
 
             if (peek() == '/' && peekpeek() == '*') {
                 nestedCount++;

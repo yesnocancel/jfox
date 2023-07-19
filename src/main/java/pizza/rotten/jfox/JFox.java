@@ -40,6 +40,8 @@ public class JFox {
             String line = reader.readLine();
             if (line == null) break;
             run(line);
+
+            // if there has been an error, reset it for the next user input
             hadError = false;
         }
     }
