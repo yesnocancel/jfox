@@ -2,13 +2,19 @@
 
 import sys
 
-BASENAME = "Expr"
+EXPRESSION_BASENAME = "Expr"
+STATEMENT_BASENAME = "Stmt"
 
 EXPRESSION_TYPES = {
   "Binary": "Expr left, Token operator, Expr right",
   "Grouping": "Expr expression",
   "Literal": "Object value",
   "Unary": "Token operator, Expr right"
+}
+
+STATEMENT_TYPES = {
+  "Expression": "Expr expression",
+  "Print": "Expr expression"
 }
 
 def write_visitor_interface(basename: str, expression_types: dict) -> str:
@@ -58,8 +64,8 @@ def define_ast(basename: str, expression_types: dict) -> str:
 
   return s
 
-def write_file(output_dir: str, content: str):
-  filepath = output_dir + "/" + BASENAME + ".java"
+def write_file(basename: str, output_dir: str, content: str):
+  filepath = output_dir + "/" + basename + ".java"
   file = open(filepath, 'w')
   file.write(content)
   file.close()
@@ -69,9 +75,11 @@ def main():
     print("Usage: generate_ast <output_directory>")
     sys.exit()
 
-  file_content = define_ast(BASENAME, EXPRESSION_TYPES)
-  write_file(sys.argv[1], file_content)
+  file_content = define_ast(EXPRESSION_BASENAME, EXPRESSION_TYPES)
+  write_file(EXPRESSION_BASENAME, sys.argv[1], file_content)
 
+  file_content = define_ast(STATEMENT_BASENAME, STATEMENT_TYPES)
+  write_file(STATEMENT_BASENAME, sys.argv[1], file_content)
 
 if __name__=="__main__":
     main()

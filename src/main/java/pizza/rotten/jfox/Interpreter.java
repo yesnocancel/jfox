@@ -1,10 +1,27 @@
 package pizza.rotten.jfox;
 
+import java.util.List;
+
 // Chapter 7
-class Interpreter implements Expr.Visitor<Object> {
+class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     Interpreter() {}
 
+    void interpret(List<Stmt> statements) {
+        try {
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } catch (RuntimeError error) {
+            JFox.runtimeError(error);
+        }
+    }
+
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
+    }
+
+    /*
     void interpret(Expr expr) {
         try {
             Object value = evaluate(expr);
@@ -13,6 +30,7 @@ class Interpreter implements Expr.Visitor<Object> {
             JFox.runtimeError(error);
         }
     }
+     */
 
     @Override
     public Object visitBinaryExpr(Expr.Binary binary) {
@@ -86,6 +104,20 @@ class Interpreter implements Expr.Visitor<Object> {
         }
 
         // unreachable
+        return null;
+    }
+
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression expression) {
+        evaluate(expression.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print print) {
+        Object value = evaluate(print.expression);
+        System.out.println(stringify(value));
         return null;
     }
 
