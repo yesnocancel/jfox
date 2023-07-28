@@ -6,15 +6,18 @@ EXPRESSION_BASENAME = "Expr"
 STATEMENT_BASENAME = "Stmt"
 
 EXPRESSION_TYPES = {
+  "Assign": "Token name, Expr value",
   "Binary": "Expr left, Token operator, Expr right",
   "Grouping": "Expr expression",
   "Literal": "Object value",
-  "Unary": "Token operator, Expr right"
+  "Unary": "Token operator, Expr right",
+  "Variable": "Token name"
 }
 
 STATEMENT_TYPES = {
   "Expression": "Expr expression",
-  "Print": "Expr expression"
+  "Print": "Expr expression",
+  "Var": "Token name, Expr initializer"
 }
 
 def write_visitor_interface(basename: str, expression_types: dict) -> str:

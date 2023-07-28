@@ -5,6 +5,8 @@ import java.util.List;
 // Chapter 7
 class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
+    private Environment environment = new Environment();
+
     Interpreter() {}
 
     void interpret(List<Stmt> statements) {
@@ -21,16 +23,12 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         stmt.accept(this);
     }
 
-    /*
-    void interpret(Expr expr) {
-        try {
-            Object value = evaluate(expr);
-            System.out.println(stringify(value));
-        } catch (RuntimeError error) {
-            JFox.runtimeError(error);
-        }
+    @Override
+    public Object visitAssignExpr(Expr.Assign assign) {
+        Object value = evaluate(assign.value);
+        environment.assign(assign.name, value);
+        return value;
     }
-     */
 
     @Override
     public Object visitBinaryExpr(Expr.Binary binary) {
@@ -107,6 +105,11 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Object visitVariableExpr(Expr.Variable variable) {
+        return environment.get(variable.name);
+    }
+
 
     @Override
     public Void visitExpressionStmt(Stmt.Expression expression) {
@@ -118,6 +121,17 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Void visitPrintStmt(Stmt.Print print) {
         Object value = evaluate(print.expression);
         System.out.println(stringify(value));
+        return null;
+    }
+
+    @Override
+    public Void visitVarStmt(Stmt.Var var) {
+        Object value = null;
+        if (var.initializer != null) {
+            value = evaluate(var.initializer);
+        }
+
+        environment.define(var.name.lexeme, value);
         return null;
     }
 
