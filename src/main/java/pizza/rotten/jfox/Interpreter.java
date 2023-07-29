@@ -2,7 +2,7 @@ package pizza.rotten.jfox;
 
 import java.util.List;
 
-// Chapter 7
+// Chapter 7 + 8
 class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private Environment environment = new Environment();
@@ -21,6 +21,25 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private void execute(Stmt stmt) {
         stmt.accept(this);
+    }
+
+    @Override
+    public Void visitBlockStmt(Stmt.Block block) {
+        executeBlock(block.statements, new Environment(environment));
+        return null;
+    }
+
+    private void executeBlock(List<Stmt> statements, Environment environment) {
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } finally {
+            this.environment = previous;
+        }
     }
 
     @Override

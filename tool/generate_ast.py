@@ -15,6 +15,7 @@ EXPRESSION_TYPES = {
 }
 
 STATEMENT_TYPES = {
+  "Block": "List<Stmt> statements",
   "Expression": "Expr expression",
   "Print": "Expr expression",
   "Var": "Token name, Expr initializer"
@@ -30,6 +31,8 @@ def write_visitor_interface(basename: str, expression_types: dict) -> str:
 
 def define_ast(basename: str, expression_types: dict) -> str:
   s = "package pizza.rotten.jfox;\n"
+  s+= "\n"
+  s+= "import java.util.List;\n"
   s+= "\n"
   s+= "abstract class "+basename+" {\n"
   s+= "\n"
